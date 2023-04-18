@@ -26,13 +26,7 @@ function renderUsers() {
 
   if (user !== undefined) {
     const world = document.querySelector('.world')
-    world.style.transform = `translate(${-user.position.x / 3}px, ${-user.position.y / 3}px)`
-
-    // document.querySelectorAll('.player').forEach(playerItem => {
-    //   if (playerItem.getAttribute('id') !== user.id) {
-    //     playerItem.style.transform = `translate(${-user.position.x / 3}px, ${-user.position.y / 3}px)`
-    //   }
-    // })
+    world.style.transform = `translate(${-user.position.x / 1.2}px, ${-user.position.y / 1.2}px)`
   }
 }
 
