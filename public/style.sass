@@ -32,12 +32,30 @@ body
 
 .player
   position: absolute
-  width: 30px
-  height: 30px
+  width: 48px
+  height: 48px
   background-repeat: no-repeat
-  background-size: contain
+  background-size: 48px
+  background-position: 0px 0px
   padding: 35px 0 0 5px
+  overflow: hidden
   text-shadow: 1px 1px 1px #fff
-  // clip: rect(0px,60px,200px,0px)
   left: 0
   right: 0
+  image-rendering: pixelated
+
+.animIdle
+  animation: idle 1s
+
+@keyframes idle
+  0%
+    background-position: 0px 0px    
+  20%
+    background-position: 48px 0px
+  40%
+    background-position: 96px 0px
+  60%
+    background-position: 144px 0px
+  80%
+    background-position: 192px 0px
+    

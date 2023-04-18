@@ -35,16 +35,19 @@ export const setEvents = (states) => {
   })
 }
 
-export const player = (users, sprite) => {
+export const player = (users, sprites) => {
   return (`
     ${Object.keys(users).map((userId) => {
       const user = users[userId]    
+      const anim = user.anim === 'idle' ? sprites.idle : sprites.run
+      const revert = user.revert ? 'transform: scaleX(-1);' : ''
       return (`
             <div 
-              class="player" 
+              class="player animIdle" 
               style="top: ${user.position.y || 0}px; 
                      left: ${user.position.x || 0}px; 
-                     background-image: url(${sprite})" 
+                     background-image: url(${anim});
+                     ${revert}"
               id="${user.id}"></div>
       `);
     }).join('')}

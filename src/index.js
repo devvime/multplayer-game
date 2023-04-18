@@ -1,5 +1,6 @@
 import './../public/style.sass'
-import sprite from './../public/assets/sprite.png'
+import spriteIdle from './../public/assets/player-01-idle.gif'
+import spriteRun from './../public/assets/player-01-run.gif'
 import { setEvents, world, player } from './functions'
 
 const socket = io()
@@ -30,7 +31,7 @@ setEvents(states)
 function renderUsers() {
   if (user !== undefined) {
     canvas.innerHTML = world()
-    canvas.querySelector('.world').innerHTML += player(users, sprite)
+    canvas.querySelector('.world').innerHTML += player(users, { idle: spriteIdle, run: spriteRun })
     const background = document.querySelector('.world')
 
     let backgroundPosition = {
@@ -43,25 +44,43 @@ function renderUsers() {
     if (backgroundPosition.y > 0) backgroundPosition.y = 0
     if (backgroundPosition.y < -326) backgroundPosition.y = -326
 
-    console.log(user.position.x);
-
     background.style.transform = `translate(${backgroundPosition.x}px, ${backgroundPosition.y}px)`
   }
 }
 
 function move() {
-  const data = { id: socket.id, position: { x: 0, y: 0 } }
-  let velocity = 2
-  if (states.keys.shift.pressed) velocity = 4
-  if (states.keys.w.pressed) data.position.y = -velocity
-  if (states.keys.s.pressed) data.position.y = velocity
-  if (states.keys.a.pressed) data.position.x = -velocity
-  if (states.keys.d.pressed) data.position.x = velocity
-  socket.emit('ON_USER_MOVE', data)
+
+  if (user !== undefined) {
+    const data = { 
+      id: socket.id, 
+      width: user.width, 
+      height: user.height, 
+      position: { x: 0, y: 0 }, 
+      revert: user.revert,
+      anim: 'idle' 
+    }
+    let velocity = 2
+    if (states.keys.shift.pressed) velocity = 4
+    if (states.keys.w.pressed) data.position.y = -velocity, user.anim = 'run'
+    if (states.keys.s.pressed) data.position.y = velocity, user.anim = 'run'
+    if (states.keys.a.pressed) data.position.x = -velocity, user.anim = 'run', user.revert = true
+    if (states.keys.d.pressed) data.position.x = velocity, user.anim = 'run', user.revert = false
+
+    data.revert = user.revert
+
+    socket.emit('ON_USER_MOVE', data)
+  }
 }
 
 socket.on('connect', () => {
-  user = { id: socket.id, position: { x: 0, y: 0 } };
+  user = { 
+    id: socket.id, 
+    width: 48, 
+    height: 48, 
+    position: { x: 0, y: 0 },
+    revert: false,
+    anim: 'idle' 
+  };
   users[socket.id] = user;
   socket.emit('ON_USER_MOVE', { id: socket.id, position: { x: 0, y: 0 } })
 });

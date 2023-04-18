@@ -19,7 +19,11 @@ io.on('connection', (socket) => {
 
   users[socket.id] = { 
     id: socket.id, 
-    position: { x: 0, y: 0 }
+    width: 48,
+    height: 48,
+    position: { x: 0, y: 0 },
+    revert: false,
+    anim: 'idle'
   };
 
   socket.on('disconnect', () => {
@@ -32,10 +36,10 @@ io.on('connection', (socket) => {
     user.position.x = user.position.x + (newPosition.position?.x || 0);
     user.position.y = user.position.y + (newPosition.position?.y || 0);
 
-    if (user.position.x < 0) user.position.x = 0
-    if (user.position.x > 705) user.position.x = 705
+    if (user.position.x < -10) user.position.x = -10
+    if (user.position.x > 680) user.position.x = 680
     if (user.position.y < 0) user.position.y = 0
-    if (user.position.y > 460) user.position.y = 460
+    if (user.position.y > 445) user.position.y = 445
     io.emit('ON_USERS_UPDATE', JSON.stringify(users));
   });
 });
