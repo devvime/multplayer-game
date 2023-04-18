@@ -61,12 +61,10 @@ function move() {
     }
     let velocity = 2
     if (states.keys.shift.pressed) velocity = 4
-    if (states.keys.w.pressed) data.position.y = -velocity, user.anim = 'run'
-    if (states.keys.s.pressed) data.position.y = velocity, user.anim = 'run'
-    if (states.keys.a.pressed) data.position.x = -velocity, user.anim = 'run', user.revert = true
-    if (states.keys.d.pressed) data.position.x = velocity, user.anim = 'run', user.revert = false
-
-    data.revert = user.revert
+    if (states.keys.w.pressed) data.position.y = -velocity, data.anim = 'run'
+    if (states.keys.s.pressed) data.position.y = velocity, data.anim = 'run'
+    if (states.keys.a.pressed) data.position.x = -velocity, data.anim = 'run', data.revert = true
+    if (states.keys.d.pressed) data.position.x = velocity, data.anim = 'run', data.revert = false
 
     socket.emit('ON_USER_MOVE', data)
   }

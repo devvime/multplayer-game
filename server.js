@@ -5,7 +5,6 @@ const server = http.createServer(app)
 const { Server } = require("socket.io")
 const io = new Server(server)
 
-
 app.use(express.static(__dirname + '/build'))
 
 app.get('/', (req, res) => {
@@ -35,6 +34,8 @@ io.on('connection', (socket) => {
     const user = users[socket.id];
     user.position.x = user.position.x + (newPosition.position?.x || 0);
     user.position.y = user.position.y + (newPosition.position?.y || 0);
+    user.revert = newPosition.revert
+    user.anim = newPosition.anim
 
     if (user.position.x < -10) user.position.x = -10
     if (user.position.x > 680) user.position.x = 680
